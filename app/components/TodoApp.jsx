@@ -13,29 +13,43 @@ var TodoApp = React.createClass({
         {
           id: uuid(),
           text: 'Walk the dog',
+          completed: false // if a task is not completed
         }, {
           id: uuid(),
-          text: 'Clean the yard'
+          text: 'Clean the yard',
+          completed: true
         }, {
           id: uuid(),
-          text: 'Leave mail on porch'
+          text: 'Leave mail on porch',
+          completed: true
         }, {
           id: uuid(),
-          text: 'Play video games'
+          text: 'Play video games',
+          completed: false
         }
       ]
     };
   },
   handleAddTodo: function (text) {
     this.setState({
-      todos: [
+      todos: [ // set new array equals to the old one
         ...this.state.todos, // keep the old todos array
         { // property of new todo item
-          id: uuid(), // generate random id
-          text: text
+          id: uuid(), // generate random id (we don't need keep track of the previous id was and what the next id should be.)
+          text: text,
+          completed: false
         }
       ]
     });
+  },
+  handleToggle: function (id) {
+    var updatedTodos = this.state.todos.map((todo) => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed; // if it's originally fause, it'll be true, and vice versa.
+      }
+      return todo;
+    });
+    this.setState({todos: updatedTodos});
   },
   handleSearch: function (showCompleted, searchText) { // set the state inside of our new handleSearch method
     this.setState({
@@ -49,7 +63,7 @@ var TodoApp = React.createClass({
     return (
       <div>
         <TodoSearch onSearch={this.handleSearch}/>
-        <TodoList todos={todos}/>
+        <TodoList todos={todos} onToggle={this.handleToggle}/>
         <AddTodo onAddTodo={this.handleAddTodo}/>
       </div>
     );
