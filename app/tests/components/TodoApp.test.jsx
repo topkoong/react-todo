@@ -17,6 +17,7 @@ describe('TodoApp', () => {
 
     todoApp.setState({todos: []});
     todoApp.handleAddTodo(todoText);
+
     expect(todoApp.state.todos[0].text).toBe(todoText);
   });
 
@@ -35,7 +36,5 @@ describe('TodoApp', () => {
     todoApp.handleToggle(11);
     // verify that value changed
     expect(todoApp.state.todos[0].completed).toBe(true);
-
-
   });
 });
