@@ -26,7 +26,7 @@ var TodoApp = React.createClass({
           id: uuid(), // generate random id (we don't need keep track of the previous id was and what the next id should be.)
           text: text,
           completed: false,
-          createdAt: moment().unix(),
+          createdAt: moment().unix(), // Store a timestamp
           completedAt: undefined
         }
       ]
@@ -36,7 +36,7 @@ var TodoApp = React.createClass({
     var updatedTodos = this.state.todos.map((todo) => {
       if (todo.id === id) {
         todo.completed = !todo.completed; // if it's originally fause, it'll be true, and vice versa.
-        todo.completedAt = todo.completed ? moment().unix() : undefined;
+        todo.completedAt = todo.completed ? moment().unix() : undefined; // Store a timestamp when completed it
       }
       return todo;
     });
@@ -54,9 +54,16 @@ var TodoApp = React.createClass({
 // <TodoList todos={todos}/> pass in the array
     return (
       <div>
-        <TodoSearch onSearch={this.handleSearch}/>
-        <TodoList todos={filteredTodos} onToggle={this.handleToggle}/>
-        <AddTodo onAddTodo={this.handleAddTodo}/>
+        <h1 className="page-title">Todo App</h1>
+        <div className="row">
+          <div className="column small-centered small-11 medium-6 large-5">
+            <div className="container">
+              <TodoSearch onSearch={this.handleSearch}/>
+              <TodoList todos={filteredTodos} onToggle={this.handleToggle}/>
+              <AddTodo onAddTodo={this.handleAddTodo}/>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
