@@ -1,4 +1,4 @@
-export var setSearchtext = (searchText) => {
+export var setSearchText = (searchText) => {
   return {
     type: 'SET_SEARCH_TEXT',
     searchText
@@ -7,10 +7,9 @@ export var setSearchtext = (searchText) => {
 
 export var toggleShowCompleted = () => {
   return {
-    type: 'TOGGLE_SHOW_COMPLETED',
+    type: 'TOGGLE_SHOW_COMPLETED'
   };
 };
-
 
 export var addTodo = (text) => {
   return {
