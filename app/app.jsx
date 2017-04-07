@@ -11,10 +11,6 @@ var store = require('configureStore').configure();
 store.subscribe(() => {
   console.log('New state', store.getState());
 });
-
-store.dispatch(actions.addTodo('Clean the yard'));
-store.dispatch(actions.setSearchText('yard'));
-store.dispatch(actions.toggleShowCompleted());
 // loading CSS (foundation)
 require('style!css!foundation-sites/dist/css/foundation.min.css'); // css!, meaning we use css loader that we installed
 // we still need to inject css to html so the style actually shows up by adding style loader first.
