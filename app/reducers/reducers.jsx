@@ -25,13 +25,7 @@ export var todosReducer = (state = [], action) => {
     case 'ADD_TODO':
       return [
         ...state,
-        { // property of new todo item
-          id: uuid(), // generate random id (we don't need keep track of the previous id was and what the next id should be.)
-          text: action.text,
-          completed: false,
-          createdAt: moment().unix(), // Store a timestamp
-          completedAt: undefined
-        }
+        action.todo
       ];
     case 'TOGGLE_TODO':
       return state.map((todo) => {

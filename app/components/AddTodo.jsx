@@ -10,7 +10,7 @@ export var AddTodo = React.createClass({
     if (todoText.length > 0) {
       this.refs.todoText.value = '';
       // this.props.onAddTodo(todoText);
-      dispatch(actions.addTodo(todoText));
+      dispatch(actions.startAddTodo(todoText));
     } else {
       this.refs.todoText.focus(); // if I click the add todo button, and it's invalidate,
       // it's gonna put cursor back in the input field automatically. So, they can type some valid texts and they can try again.
