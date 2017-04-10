@@ -3,11 +3,12 @@ var ReactDOM = require('react-dom');
 var {Provider} = require('react-redux');
 //This is exactly the same below, creating new variable Route = require('react-router').Route;
 var {Route, Router, IndexRoute, hashHistory} = require('react-router');// all the properties we wanna pull off
-var TodoApp = require('TodoApp');
+import TodoApp from 'TodoApp';
 
 var actions = require('actions');
 var store = require('configureStore').configure();
 var TodoAPI = require('TodoAPI');
+import Login from 'Login';
 
 // import './../playground/firebase/index';
 
@@ -43,7 +44,12 @@ require('style!css!sass!applicationStyles');
 //TodoApp and its children can access to the store
 ReactDOM.render(
   <Provider store={store}>
-    <TodoApp/>
+    <Router history={hashHistory}>
+      <Route path="/">
+        <Route path="todos" component={TodoApp}/>
+        <IndexRoute component={Login}/>
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('app')
 );
