@@ -2,13 +2,20 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var {Provider} = require('react-redux');
 //This is exactly the same below, creating new variable Route = require('react-router').Route;
-var {Route, Router, IndexRoute, hashHistory} = require('react-router');// all the properties we wanna pull off
-import TodoApp from 'TodoApp';
+var { hashHistory} = require('react-router');// all the properties we wanna pull off
 
 var actions = require('actions');
 var store = require('configureStore').configure();
-var TodoAPI = require('TodoAPI');
-import Login from 'Login';
+import firebase from 'app/firebase/';
+import router from 'app/router';
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    hashHistory.push('/todos');
+  } else {
+    hashHistory.push('/');
+  }
+});
 
 // import './../playground/firebase/index';
 
@@ -42,14 +49,12 @@ require('style!css!sass!applicationStyles');
 //var {name} = obj; // This creates a new variable called name and sets it to equal to whatever obj.name equals to.
 
 //TodoApp and its children can access to the store
+
+
+
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory}>
-      <Route path="/">
-        <Route path="todos" component={TodoApp}/>
-        <IndexRoute component={Login}/>
-      </Route>
-    </Router>
+    {router}
   </Provider>,
   document.getElementById('app')
 );
