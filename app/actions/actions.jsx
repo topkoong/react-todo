@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import firebase, {firebaseRef} from 'app/firebase/';
 
 export var setSearchText = (searchText) => {
@@ -27,7 +28,7 @@ export var startAddTodo = (text) => {
       // id: uuid(), // generate random id (we don't need keep track of the previous id was and what the next id should be.)
       text,
       completed: false,
-      createdAt: moment().unix(), // Store a timestamp
+      createdAt: moment().unix(),
       completedAt: null
     };
     var todoRef = firebaseRef.child('todos').push(todo);
@@ -45,6 +46,26 @@ export var addTodos = (todos) => {
   return {
     type: 'ADD_TODOS',
     todos
+  };
+};
+
+export var startAddTodos = () => {
+  return (dispatch, getState) => {
+    var todosRef = firebaseRef.child('todos');
+
+    return todosRef.once('value').then((snapshot) => {
+      var todos = snapshot.val() || {};
+      var parsedTodos = [];
+
+      Object.keys(todos).forEach((todoId) => {
+        parsedTodos.push({
+          id: todoId,
+          ...todos[todoId]
+        });
+      });
+
+      dispatch(addTodos(parsedTodos));
+    });
   };
 };
 
