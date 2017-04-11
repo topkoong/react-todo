@@ -1,6 +1,5 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-
 var expect = require('expect');
 
 import firebase, {firebaseRef} from 'app/firebase/';
@@ -24,8 +23,8 @@ describe('Actions', () => {
       type: 'TOGGLE_SHOW_COMPLETED'
     };
     var res = actions.toggleShowCompleted();
-    expect(res).toEqual(action);
 
+    expect(res).toEqual(action);
   });
 
   it('should generate add todo action', () => {
@@ -41,22 +40,6 @@ describe('Actions', () => {
     var res = actions.addTodo(action.todo);
 
     expect(res).toEqual(action);
-  });
-
-  it('should create todo and dispatch ADD_TODO', (done) => {
-    const store = createMockStore({});
-    const todoText = 'My todo item';
-
-    store.dispatch(actions.startAddTodo(todoText)).then(() => {
-      const actions = store.getActions();
-      expect(actions[0]).toInclude({
-        type: 'ADD_TODO'
-      });
-      expect(actions[0].todo).toInclude({
-        text: todoText
-      });
-      done();
-    }).catch(done);
   });
 
   it('should generate add todos action object', () => {
@@ -83,8 +66,8 @@ describe('Actions', () => {
       updates: {completed: false}
     };
     var res = actions.updateTodo(action.id, action.updates);
-    expect(res).toEqual(action);
 
+    expect(res).toEqual(action);
   });
 
   it('should generate login action object', () => {
@@ -97,34 +80,47 @@ describe('Actions', () => {
     expect(res).toEqual(action);
   });
 
-  it('should generate logout action object', ()=> {
+  it('should generate logout action object', () => {
     const action = {
       type: 'LOGOUT'
     };
     const res = actions.logout();
+
+    expect(res).toEqual(action);
   });
 
   describe('Tests with firebase todos', () => {
     var testTodoRef;
+    var uid;
+    var todosRef;
 
     beforeEach((done) => {
-      var todosRef = firebaseRef.child('todos');
+      var credential = firebase.auth.GithubAuthProvider.credential(process.env.GITHUB_ACCESS_TOKEN);
 
-      todosRef.remove().then(() => {
-        testTodoRef = firebaseRef.child('todos').push();
+      firebase.auth().signInWithCredential(credential).then((user) => {
+        uid = user.uid;
+        todosRef = firebaseRef.child(`users/${uid}/todos`);
+
+        return todosRef.remove();
+      }).then(() => {
+        testTodoRef = todosRef.push();
+
         return testTodoRef.set({
           text: 'Something to do',
           completed: false,
           createdAt: 23453453
-        });
-      }).then(() => done())
+        })
+      })
+      .then(() => done())
       .catch(done);
     });
+
     afterEach((done) => {
-      testTodoRef.remove().then(() => done());
+      todosRef.remove().then(() => done());
     });
+
     it('should toggle todo and dispatch UPDATE_TODO action', (done) => {
-      const store = createMockStore({});
+      const store = createMockStore({auth: {uid}});
       const action = actions.startToggleTodo(testTodoRef.key, true);
 
       store.dispatch(action).then(() => {
@@ -137,14 +133,14 @@ describe('Actions', () => {
         expect(mockActions[0].updates).toInclude({
           completed: true
         });
-
         expect(mockActions[0].updates.completedAt).toExist();
+
         done();
       }, done);
     });
 
     it('should populate todos and dispatch ADD_TODOS', (done) => {
-      const store = createMockStore({});
+      const store = createMockStore({auth: {uid}});
       const action = actions.startAddTodos();
 
       store.dispatch(action).then(() => {
@@ -153,8 +149,25 @@ describe('Actions', () => {
         expect(mockActions[0].type).toEqual('ADD_TODOS');
         expect(mockActions[0].todos.length).toEqual(1);
         expect(mockActions[0].todos[0].text).toEqual('Something to do');
+
         done();
-      }, done);
+      }, done)
+    });
+
+    it('should create todo and dispatch ADD_TODO', (done) => {
+      const store = createMockStore({auth: {uid}});
+      const todoText = 'My todo item';
+
+      store.dispatch(actions.startAddTodo(todoText)).then(() => {
+        const actions = store.getActions();
+        expect(actions[0]).toInclude({
+          type: 'ADD_TODO'
+        });
+        expect(actions[0].todo).toInclude({
+          text: todoText
+        });
+        done();
+      }).catch(done);
     });
   });
 });
