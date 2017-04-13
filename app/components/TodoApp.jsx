@@ -14,7 +14,7 @@ import * as actions from 'actions';
 
 
 
-export var TodoApp = React.createClass({
+export class TodoApp extends React.Component {
   // {
   // getInitialState: function () {
   //   return {
@@ -56,20 +56,20 @@ export var TodoApp = React.createClass({
   //     searchText: searchText.toLowerCase()
   //   });
   // },
-  onLogout(e) {
+  onLogout (e) {
     var {dispatch} = this.props;
     e.preventDefault();
 
     dispatch(actions.startLogout());
-  },
-  render() {
+  }
+  render () {
     // var {todos, showCompleted, searchText} = this.state;
     // var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
 // <TodoList todos={todos}/> pass in the array
     return (
       <div>
         <div className="page-actions">
-          <a href="#" onClick={this.onLogout}>Logout</a>
+          <a href="#" onClick={this.onLogout.bind(this)}>Logout</a>
         </div>
         <h1 className="page-title">Todo App</h1>
         <div className="row">
@@ -84,6 +84,6 @@ export var TodoApp = React.createClass({
       </div>
     );
   }
-});
+};
 
 export default Redux.connect()(TodoApp);

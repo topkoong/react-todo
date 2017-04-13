@@ -4,8 +4,8 @@ import Todo from 'Todo';
 var TodoAPI = require('TodoAPI');
 // var Todo = require('Todo');
 
-export var TodoList = React.createClass({
-  render: function () {
+export class TodoList extends React.Component {
+  render () {
     var {todos, showCompleted, searchText} = this.props; // pull the todos props off of this.props
     var renderTodos = () => { // define new render function
       var filteredTodos = TodoAPI.filterTodos(todos, showCompleted, searchText);
@@ -28,7 +28,7 @@ export var TodoList = React.createClass({
       </div>
     )
   }
-});
+};
 
 export default connect(
   (state) => { //completeState as well as searchtext value

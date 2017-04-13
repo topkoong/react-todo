@@ -2,8 +2,8 @@ var React = require('react');
 var {connect} = require('react-redux');
 var actions = require('actions');
 
-export var AddTodo = React.createClass({
-  handleSubmit: function (e) {
+export class AddTodo extends React.Component {
+  handleSubmit (e) {
     e.preventDefault();
     var {dispatch} = this.props;
     var todoText = this.refs.todoText.value;
@@ -15,18 +15,18 @@ export var AddTodo = React.createClass({
       this.refs.todoText.focus(); // if I click the add todo button, and it's invalidate,
       // it's gonna put cursor back in the input field automatically. So, they can type some valid texts and they can try again.
     }
-  },
-  render: function() {
+  }
+  render () {
     return (
       <div className="container__footer">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           <input type="text" ref="todoText" placeholder="What do you need to do?"/>
           <button className="button expanded">Add Todo</button>
         </form>
       </div>
     );
   }
-});
+};
 
 // module.exports = AddTodo;
 export default connect()(AddTodo);

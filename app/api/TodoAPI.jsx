@@ -34,7 +34,7 @@ module.exports = {
       // If the searchText.length === 0, it means we want to return every single item.
       // If text.indexOf(searchText) > -1, checking if the text is inside,
       // it will return -1 if it wasn't found or return 0 if it was found
-      return searchText.length === 0 || text.indexOf(searchText) > -1;
+      return searchText.length === 0 || text.indexOf(searchText.toLowerCase()) > -1;
     });
     // Sort todos with non-completed first
     filteredTodos.sort((a, b) => {
